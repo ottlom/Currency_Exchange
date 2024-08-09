@@ -8,3 +8,4 @@ public class CurrencyUtil {
         return new CurrencyDTO(currency.getCode(), currency.getName(), currency.getSign());
     }
 }
+
