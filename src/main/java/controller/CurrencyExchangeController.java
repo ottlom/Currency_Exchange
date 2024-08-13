@@ -17,7 +17,7 @@ public class CurrencyExchangeController {
     public List<Currency> getAllCurrency() {
         List<Currency> currencyList = new ArrayList<>();
         try {
-            resultSet = getResultSet(connection, "SELECT * FROM currencies").executeQuery();
+            resultSet = getPrepareStatement(connection, "SELECT * FROM currencies").executeQuery();
             while (resultSet.next()) {
                 currencyList.add(new Currency(
                         resultSet.getString("full_name"),
@@ -30,10 +30,10 @@ public class CurrencyExchangeController {
         return currencyList;
     }
 
-    public Currency get(String currencyCode) {
+    public Currency getCurrency(String currencyCode) {
         Currency currency = new Currency();
         try {
-            PreparedStatement preparedStatement = getResultSet(connection, "SELECT * FROM currencies WHERE code=?");
+            PreparedStatement preparedStatement = getPrepareStatement(connection, "SELECT * FROM currencies WHERE code=?");
             preparedStatement.setString(1, currencyCode);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -47,9 +47,9 @@ public class CurrencyExchangeController {
         return currency;
     }
 
-    public Currency save(Currency currency) {
+    public void saveCurrency(Currency currency) {
         try {
-            PreparedStatement preparedStatement = getResultSet(connection,
+            PreparedStatement preparedStatement = getPrepareStatement(connection,
                     "INSERT INTO currencies (full_name, code, sign) VALUES (?,?,?)");
             preparedStatement.setString(1, currency.getName());
             preparedStatement.setString(2, currency.getCode());
@@ -58,12 +58,11 @@ public class CurrencyExchangeController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return currency;
     }
 
-    public Currency update(Currency currency) {
+    public Currency updateCurrency(Currency currency) {
         try {
-            PreparedStatement preparedStatement = getResultSet(connection,
+            PreparedStatement preparedStatement = getPrepareStatement(connection,
                     "UPDATE currencies SET full_name=?, code=?, sign=? WHERE code=?");
             preparedStatement.setString(1, currency.getName());
             preparedStatement.setString(2, currency.getCode());
@@ -78,7 +77,7 @@ public class CurrencyExchangeController {
 
     public void delete(String currencyCode) {
         try {
-            PreparedStatement preparedStatement = getResultSet(connection, "DELETE FROM currencies WHERE code=?");
+            PreparedStatement preparedStatement = getPrepareStatement(connection, "DELETE FROM currencies WHERE code=?");
             preparedStatement.setString(1, currencyCode);
             preparedStatement.execute();
         } catch (SQLException e) {
@@ -89,14 +88,17 @@ public class CurrencyExchangeController {
     public List<ExchangeRate> getAllRate() {
         List<ExchangeRate> list = new ArrayList<>();
         try {
-            PreparedStatement preparedStatement = getResultSet(connection,
-                    "SELECT * FROM exchange_rates");
+            PreparedStatement preparedStatement = getPrepareStatement(connection,
+                    "SELECT * " +
+                            "FROM exchange_rates e " +
+                            "LEFT JOIN currencies c_base ON e.base_currency_id = c_base.id " +
+                            "LEFT JOIN currencies c_target ON e.target_currency_id = c_target.id");
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 list.add(new ExchangeRate(
                         resultSet.getInt("base_currency_id"),
                         resultSet.getInt("target_currency_id"),
-                        resultSet.getDouble("rate")));
+                        resultSet.getInt("rate")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -104,20 +106,61 @@ public class CurrencyExchangeController {
         return list;
     }
 
-    private PreparedStatement getResultSet(Connection connection, String query) {
+    public void saveRate(String baseCurrenciesCode, String targetCurrenciesCode, double rate) {
+        try {
+            PreparedStatement preparedStatement = getPrepareStatement(connection,
+                    "INSERT INTO exchange_rates (base_currency_id, target_currency_id, rate) " +
+                            "VALUES ((SELECT id FROM currencies WHERE code=?), (SELECT id FROM currencies WHERE code=?), ?)");
+            preparedStatement.setString(1, baseCurrenciesCode);
+            preparedStatement.setString(2, targetCurrenciesCode);
+            preparedStatement.setDouble(3, rate);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public ExchangeRate getExchangeRate(String baseCurrenciesCode, String targetCurrenciesCode) {
+        ExchangeRate exchangeRate = null;
+        try {
+            PreparedStatement preparedStatement = getPrepareStatement(connection,
+                    "SELECT * FROM exchange_rates " +
+                            "WHERE base_currency_id = (SELECT id FROM currencies WHERE code=?) " +
+                            "AND target_currency_id = (SELECT id FROM currencies WHERE code=?)");
+            preparedStatement.setString(1, baseCurrenciesCode);
+            preparedStatement.setString(2, targetCurrenciesCode);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                exchangeRate = new ExchangeRate(
+                        resultSet.getInt("base_currency_id"),
+                        resultSet.getInt("target_currency_id"),
+                        resultSet.getDouble("rate"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return exchangeRate;
+    }
+
+    public void updateExchangeRate(String baseCurrenciesCode, String targetCurrenciesCode, double rate) {
+        try {
+            PreparedStatement preparedStatement = getPrepareStatement(connection,
+                    "UPDATE exchange_rates " +
+                            "SET rate = ? " +
+                            "WHERE base_currency_id = (SELECT id FROM currencies WHERE code=?) " +
+                            "AND target_currency_id = (SELECT id FROM currencies WHERE code=?)");
+            preparedStatement.setDouble(1, rate);
+            preparedStatement.setString(2, baseCurrenciesCode);
+            preparedStatement.setString(3, targetCurrenciesCode);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private PreparedStatement getPrepareStatement(Connection connection, String query) {
         return sqlUtil.executeSqlQuery(connection, query);
     }
-    //crud operations
-    //Получение списка валют getAll+
-    //get+
-    //Получение списка всех обменных курсов
-    //Получение конкретного обменного курса. Валютная пара задаётся идущими подряд кодами валют в адресе запроса
-    //
-    //Post
-    // Добавление новой валюты в базу+
-    //Добавление нового обменного курса в базу. Данные передаются в теле запроса в виде полей формы (x-www-form-urlencoded). Поля формы - baseCurrencyCode, targetCurrencyCode, rate
-    //
-    //PATCH
-    //Обновление существующего в базе обменного курса
-    //Расчёт перевода определённого количества средств из одной валюты в другую
 }
