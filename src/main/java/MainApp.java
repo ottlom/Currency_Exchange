@@ -13,8 +13,9 @@ public class MainApp {
 //        controller.delete("SEK");
 //        System.out.println(controller.getAllRate());
 //        ExchangeServlet servlet = new ExchangeServlet();
-//        controller.saveRate("CHF","USD", 1.15);
-//        System.out.println(controller.getExchangeRate("CHF","USD"));
-        controller.updateExchangeRate("CHF","USD", 1.15);
+//        controller.saveRate("USD", "CHF", 0.87);
+//        System.out.println(controller.getExchangeRate("USD","RUB"));
+//        controller.updateExchangeRate("CHF","USD", 1.15);
+        System.out.println(controller.changeCurrency("RUB", "SEK", 1));
     }
 }

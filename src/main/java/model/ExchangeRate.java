@@ -3,9 +3,9 @@ package model;
 public class ExchangeRate {
     private int baseCurrencyId;
     private int targetCurrencyId;
-    private double rate;
+    private float rate;
 
-    public ExchangeRate(int baseCurrencyId, int targetCurrencyId, double rate) {
+    public ExchangeRate(int baseCurrencyId, int targetCurrencyId, float rate) {
         this.baseCurrencyId = baseCurrencyId;
         this.targetCurrencyId = targetCurrencyId;
         this.rate = rate;
@@ -27,11 +27,11 @@ public class ExchangeRate {
         this.targetCurrencyId = targetCurrencyId;
     }
 
-    public double getRate() {
+    public float getRate() {
         return rate;
     }
 
-    public void setRate(double rate) {
+    public void setRate(float rate) {
         this.rate = rate;
     }
 
