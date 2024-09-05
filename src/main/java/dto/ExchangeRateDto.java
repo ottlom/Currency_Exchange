@@ -1,18 +1,18 @@
-package model;
+package dto;
 
-public class ExchangeRate {
+public class ExchangeRateDto {
     private int id;
-    private Currency baseCurrency;
-    private Currency targetCurrency;
+    private CurrencyDto baseCurrency;
+    private CurrencyDto targetCurrency;
     private float rate;
 
-    public ExchangeRate(Currency baseCurrency, Currency targetCurrency, float rate) {
+    public ExchangeRateDto(CurrencyDto baseCurrency, CurrencyDto targetCurrency, float rate) {
         this.baseCurrency = baseCurrency;
         this.targetCurrency = targetCurrency;
         this.rate = rate;
     }
 
-    public ExchangeRate(int id, Currency baseCurrency, Currency targetCurrency, float rate) {
+    public ExchangeRateDto(int id, CurrencyDto baseCurrency, CurrencyDto targetCurrency, float rate) {
         this.id = id;
         this.baseCurrency = baseCurrency;
         this.targetCurrency = targetCurrency;
@@ -27,19 +27,19 @@ public class ExchangeRate {
         this.id = id;
     }
 
-    public Currency getBaseCurrency() {
+    public CurrencyDto getBaseCurrency() {
         return baseCurrency;
     }
 
-    public void setBaseCurrency(Currency baseCurrency) {
+    public void setBaseCurrency(CurrencyDto baseCurrency) {
         this.baseCurrency = baseCurrency;
     }
 
-    public Currency getTargetCurrency() {
+    public CurrencyDto getTargetCurrency() {
         return targetCurrency;
     }
 
-    public void setTargetCurrency(Currency targetCurrency) {
+    public void setTargetCurrency(CurrencyDto targetCurrency) {
         this.targetCurrency = targetCurrency;
     }
 

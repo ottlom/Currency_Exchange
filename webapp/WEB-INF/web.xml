@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <servlet>
+        <servlet-name>exchangeRatesServlet</servlet-name>
+        <servlet-class>web.ExchangeRatesServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>exchangeRatesServlet</servlet-name>
+        <url-pattern>/exchangeRates</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>exchangeRateServlet</servlet-name>
+        <servlet-class>web.ExchangeRateServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>exchangeRateServlet</servlet-name>
+        <url-pattern>/exchangeRate/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>currenciesServlet</servlet-name>
+        <servlet-class>web.CurrenciesServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>currenciesServlet</servlet-name>
+        <url-pattern>/currencies</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>currencyServlet</servlet-name>
+        <servlet-class>web.CurrencyServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>currencyServlet</servlet-name>
+        <url-pattern>/currency/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>exchangeServlet</servlet-name>
+        <servlet-class>web.ExchangeServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>exchangeServlet</servlet-name>
+        <url-pattern>/exchange</url-pattern>
+    </servlet-mapping>
+</web-app>
