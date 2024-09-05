@@ -1,11 +1,11 @@
 package util;
 
-import dto.CurrencyDTO;
+import dto.CurrencyDto;
 import model.Currency;
 
 public class CurrencyUtil {
-    public CurrencyDTO toCurrencyDTO(Currency currency) {
-        return new CurrencyDTO(currency.getCode(), currency.getName(), currency.getSign());
+    public static CurrencyDto toCurrencyDTO(Currency currency) {
+        return new CurrencyDto(currency.getId(), currency.getName(), currency.getCode(), currency.getSign());
     }
 }
 
