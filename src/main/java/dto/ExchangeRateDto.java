@@ -6,12 +6,6 @@ public class ExchangeRateDto {
     private CurrencyDto targetCurrency;
     private float rate;
 
-    public ExchangeRateDto(CurrencyDto baseCurrency, CurrencyDto targetCurrency, float rate) {
-        this.baseCurrency = baseCurrency;
-        this.targetCurrency = targetCurrency;
-        this.rate = rate;
-    }
-
     public ExchangeRateDto(int id, CurrencyDto baseCurrency, CurrencyDto targetCurrency, float rate) {
         this.id = id;
         this.baseCurrency = baseCurrency;
