@@ -5,22 +5,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public final class Jdbc {
-    private static Jdbc jdbc;
     private Connection connection;
 
-    private Jdbc() {
+    public Jdbc() {
         try {
-            this.connection = DriverManager.getConnection("jdbc:sqlite:currency_exchange_db");
+            DriverManager.registerDriver(new org.sqlite.JDBC());
+            this.connection = DriverManager.getConnection("jdbc:sqlite:C:\\Java\\projects\\Currency_Exchange\\src\\main\\resources\\currency_exchange_db");
         } catch (SQLException e) {
             System.out.println("не удалось подключиться к базе");
-        }
-    }
-
-    public static Jdbc getJdbc() {
-        if (jdbc == null) {
-            return jdbc = new Jdbc();
-        } else {
-            return jdbc;
         }
     }
 
